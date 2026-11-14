@@ -17,5 +17,9 @@ export const env = {
   get hitpaySalt() { return required("HITPAY_SALT"); },
   get hitpayApiBase() { return process.env.HITPAY_API_BASE || "https://api.sandbox.hit-pay.com"; },
   get staffPassword() { return required("STAFF_PASSWORD"); },
-  get appUrl() { return (process.env.APP_URL || "http://localhost:3000").replace(/\/+$/, ""); },
+  get appUrl() {
+    // On Vercel, fall back to the site's own production address automatically.
+    const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+    return (process.env.APP_URL || (vercel ? `https://${vercel}` : "http://localhost:3000")).replace(/\/+$/, "");
+  },
 };
